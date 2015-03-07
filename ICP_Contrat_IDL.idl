@@ -1,0 +1,68 @@
+
+
+module publicKeyInfrastructure{
+	
+	interface Porteur;
+	interface AutoriteCertification;
+	interface Utilisateur;
+	
+	exception certificatPerime{
+		string raison;
+	};
+	
+	exception certificatInvalide{
+		string raison;
+	};
+	
+	exception certificatIntrouvable{
+		string raison;
+	};
+	
+	exception PermissionNonAccordee{
+		string raison;
+	};
+
+	struct Date{
+		unsigned short annee;
+		unsigned short mois;
+		unsigned short jour;
+	};
+	
+	struct Certificat{
+		string id;
+		string clefPublique;
+		string usageCle;
+		AutoriteCertification autoriteAssociee;
+		Porteur porteurAssocie;
+		Date valideDebut;
+		Date valideFin;
+	};
+	
+	interface Utilisateur{
+		void afficherMessageClair(in string message);
+	};
+	
+	interface Porteur : Utilisateur{
+		readonly attribute string identite;
+		readonly attribute Certificat monCertificat;
+		void afficherMessageSigne(in string message, in string signature);
+		void afficherMessageChiffre(in string message);
+		void afficherMessageSigneChiffre(in string message, in Certificat certificat);
+	};
+
+	interface AutoriteEnregistrement{
+		void changerEtatCertificat(in string etat)raises(PermissionNonAccordee,certificatIntrouvable);
+		Certificat genererCertificat(in string login, in string password, in string identite, in string clefPublique, in string usage)raises(PermissionNonAccordee);
+		Certificat recupererCertificat(in string identite)raises(certificatIntrouvable);
+	};
+
+	interface AutoriteValidation{
+		void validerCertificat(in Certificat certificatAValider)raises(certificatInvalide);
+	};
+
+	interface AutoriteCertification : Porteur{
+		readonly attribute AutoriteCertification autoriteRacine;
+		Certificat genererCertificat(in string identite, in string clefPublique, in string usage);
+	};
+	
+};
