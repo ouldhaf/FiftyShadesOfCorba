@@ -2,6 +2,8 @@
 
 M2 STRI Projet CORBA
 
+petite modif
+
 INFRASTRUCTURE A CLES PUBLIQUES Contexte de l’application à réaliser
 
 On demande le développement d'une messagerie simplifiée entre utilisateurs d'une organisation (entreprise, administration...). Cette messagerie sera sécurisée au moyen d'une Infrastructure à Clés Publiques.
